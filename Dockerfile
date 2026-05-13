@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN ./node_modules/.bin/vite build
+RUN RUN npx vite build
 
 FROM node:20-alpine
 WORKDIR /app
