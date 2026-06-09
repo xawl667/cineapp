@@ -1,7 +1,10 @@
 import { NavLink } from 'react-router-dom'
 import styles from './Navbar.module.css'
+import { useAuth } from '../../context/AuthContext'
 
 function Navbar({ nbFavoris }) {
+  const { user, logout } = useAuth()
+
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
@@ -45,9 +48,27 @@ function Navbar({ nbFavoris }) {
             </NavLink>
           </li>
         </ul>
+
+        <div className={styles.authSection}>
+          {user ? (
+            <>
+              <NavLink to="/profile" className={styles.username}>
+                👤 {user.username}
+            </NavLink>
+              <button onClick={logout} className={styles.logoutBtn}>
+                Déconnexion
+              </button>
+            </>
+          ) : (
+            <NavLink to="/login" className={styles.link}>
+              Connexion
+            </NavLink>
+          )}
+        </div>
+
       </nav>
     </header>
   )
 }
 
-export default Navbar
+export default Navbar 

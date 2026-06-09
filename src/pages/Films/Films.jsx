@@ -8,7 +8,7 @@ import styles from './Films.module.css'
 
 const tousLesGenres = ['Tous', ...new Set(films.map((f) => f.genre))]
 
-function Films({ toggleFavori, isFavori }) {
+function Films({ toggleFavori, isFavori, toggleWatchlist, isInWatchlist }) {
   const [recherche, setRecherche] = useState('')
   const [genreActif, setGenreActif] = useState('Tous')
   const [filmsFiltres, setFilmsFiltres] = useState(films)
@@ -64,6 +64,8 @@ function Films({ toggleFavori, isFavori }) {
               film={film}
               toggleFavori={toggleFavori}
               isFavori={isFavori}
+              toggleWatchlist={toggleWatchlist}
+              isInWatchlist={isInWatchlist}
             />
           ))}
         </div>

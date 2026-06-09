@@ -5,29 +5,56 @@ import Films from './pages/Films/Films'
 import FilmDetail from './pages/FilmDetail/FilmDetail'
 import Favoris from './pages/Favoris/Favoris'
 import NotFound from './pages/NotFound/NotFound'
-import { useState } from 'react'
+import Register from './pages/Register/Register'
+import Login from './pages/Login/Login'
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+import Profile from './pages/Profile/profile'
+import Watchlist from './pages/Watchlist/Watchlist'
+import { useFavoris } from './hooks/useFavoris'
+import { useWatchlist } from './hooks/useWatchlist'
 
 function App() {
-  const [favoris, setFavoris] = useState([])
-
-  const toggleFavori = (film) => {
-    setFavoris(prev =>
-      prev.find(f => f.id === film.id)
-        ? prev.filter(f => f.id !== film.id)
-        : [...prev, film]
-    )
-  }
-
-  const isFavori = (id) => favoris.some(f => f.id === id)
+  const { favoris, toggleFavori, isFavori } = useFavoris()
+  const { watchlist, toggleWatchlist, isInWatchlist } = useWatchlist()
 
   return (
     <>
       <Navbar nbFavoris={favoris.length} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/films" element={<Films toggleFavori={toggleFavori} isFavori={isFavori} />} />
-        <Route path="/films/:id" element={<FilmDetail toggleFavori={toggleFavori} isFavori={isFavori} />} />
-        <Route path="/favoris" element={<Favoris favoris={favoris} toggleFavori={toggleFavori} />} />
+        <Route path="/films" element={
+          <Films
+            toggleFavori={toggleFavori}
+            isFavori={isFavori}
+            toggleWatchlist={toggleWatchlist}
+            isInWatchlist={isInWatchlist}
+          />
+        } />
+        <Route path="/films/:id" element={
+          <FilmDetail
+            toggleFavori={toggleFavori}
+            isFavori={isFavori}
+            toggleWatchlist={toggleWatchlist}
+            isInWatchlist={isInWatchlist}
+          />
+        } />
+        <Route path="/favoris" element={
+          <ProtectedRoute>
+            <Favoris favoris={favoris} toggleFavori={toggleFavori} />
+          </ProtectedRoute>
+        } />
+        <Route path="/watchlist" element={
+          <ProtectedRoute>
+            <Watchlist watchlist={watchlist} toggleWatchlist={toggleWatchlist} />
+          </ProtectedRoute>
+        } />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
