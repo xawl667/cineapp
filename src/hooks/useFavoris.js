@@ -1,40 +1,41 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthContext"
+import { api } from "../services/api"
 
 export function useFavoris() {
   const { user } = useAuth()
-  const storageKey = user ? `favoris_${user.id}` : null
+  const [favoris, setFavoris] = useState([])
 
-  const [favoris, setFavoris] = useState(() => {
-    if (!storageKey) return []
-    return JSON.parse(localStorage.getItem(storageKey) || "[]")
-  })
-
+  // Charge les favoris depuis l'API quand l'user change
   useEffect(() => {
-    if (!storageKey) {
+    if (!user) {
       setFavoris([])
       return
     }
-    const saved = JSON.parse(localStorage.getItem(storageKey) || "[]")
-    setFavoris(saved)
-  }, [storageKey])
+    api.getFavoris()
+      .then(data => setFavoris(data))
+      .catch(err => console.error('Erreur getFavoris:', err))
+  }, [user])
 
-  useEffect(() => {
-    if (!storageKey) return
-    localStorage.setItem(storageKey, JSON.stringify(favoris))
-  }, [favoris, storageKey])
+  async function toggleFavori(film) {
+    if (!user) return
 
-  function toggleFavori(film) {
-    setFavoris(prev =>
-      prev.find(f => f.id === film.id)
-        ? prev.filter(f => f.id !== film.id)
-        : [...prev, film]
-    )
+    const dejaDedans = favoris.some(f => f.tmdb_id === film.tmdb_id || f.id === film.id)
+
+    if (dejaDedans) {
+      const favori = favoris.find(f => f.tmdb_id === film.tmdb_id || f.id === film.id)
+      await api.removeFavori(favori.id)
+      setFavoris(prev => prev.filter(f => f.id !== favori.id))
+    } else {
+      await api.addFavori(film.id)
+      const updated = await api.getFavoris()
+      setFavoris(updated)
+    }
   }
 
   function isFavori(id) {
-    return favoris.some(f => f.id === id)
+    return favoris.some(f => f.tmdb_id === id || f.id === id)
   }
 
   return { favoris, toggleFavori, isFavori }
-} 
+}

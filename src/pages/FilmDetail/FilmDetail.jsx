@@ -1,59 +1,59 @@
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import films from '../../data/films'
+import { api } from '../../services/api'
 import styles from './FilmDetail.module.css'
 
-function FilmDetail({ toggleFavori, isFavori }) {
+function FilmDetail({ toggleFavori, isFavori, toggleWatchlist, isInWatchlist }) {
   const { id } = useParams()
   const navigate = useNavigate()
   const [film, setFilm] = useState(null)
+  const [similaires, setSimilaires] = useState([])
+  const [loading, setLoading] = useState(true)
 
- 
   useEffect(() => {
-    const trouve = films.find((f) => f.id === parseInt(id))
-    if (!trouve) {
-      navigate('/404')
-    } else {
-      setFilm(trouve)
-      window.scrollTo(0, 0)
-    }
-  }, [id, navigate])
+    api.getFilmById(id)
+      .then(data => {
+        setFilm(data)
+        window.scrollTo(0, 0)
+      })
+      .catch(() => navigate('/404'))
+      .finally(() => setLoading(false))
+  }, [id])
 
+  // Films similaires via TMDB
+  useEffect(() => {
+    if (!film) return
+    fetch(`https://api.themoviedb.org/3/movie/${film.tmdb_id}/similar?language=fr-FR&api_key=${import.meta.env.VITE_TMDB_API_KEY}`)
+      .then(r => r.json())
+      .then(data => setSimilaires(data.results?.slice(0, 3) || []))
+      .catch(err => console.error('Erreur similaires:', err))
+  }, [film])
+
+  if (loading) return <div className="page-wrapper"><p>Chargement...</p></div>
   if (!film) return null
 
-  const favori = isFavori(film.id)
-
- 
-  const similaires = films
-    .filter((f) => f.genre === film.genre && f.id !== film.id)
-    .slice(0, 3)
+  const favori = isFavori(film.tmdb_id)
+  const watchlist = isInWatchlist(film.tmdb_id)
 
   return (
     <div className={styles.page}>
-      {/* BACKDROP */}
       <div
         className={styles.backdrop}
-        style={{ backgroundImage: `url(${film.image})` }}
+        style={{ backgroundImage: `url(${film.affiche})` }}
       >
         <div className={styles.backdropOverlay} />
       </div>
 
       <div className="page-wrapper" style={{ position: 'relative', zIndex: 2 }}>
-        {/* Retour */}
-        <Link to="/films" className={styles.backLink}>
-          ← Retour aux films
-        </Link>
+        <Link to="/films" className={styles.backLink}>← Retour aux films</Link>
 
-        {/* Contenu principal */}
         <div className={styles.content}>
-          <img src={film.image} alt={film.titre} className={styles.poster} />
+          <img src={film.affiche} alt={film.titre} className={styles.poster} />
 
           <div className={styles.info}>
             <div className={styles.genres}>
-              {film.genres.map((g) => (
-                <span key={g} className={styles.genreBadge}>
-                  {g}
-                </span>
+              {film.genres?.map(g => (
+                <span key={g} className={styles.genreBadge}>{g}</span>
               ))}
             </div>
 
@@ -61,35 +61,40 @@ function FilmDetail({ toggleFavori, isFavori }) {
 
             <div className={styles.meta}>
               <span>📅 {film.annee}</span>
-              <span>⏱ {film.duree}</span>
               <span>⭐ {film.note} / 10</span>
             </div>
 
-            <p className={styles.realisateur}>
-              Réalisé par <strong>{film.realisateur}</strong>
-            </p>
+            <p className={styles.description}>{film.synopsis}</p>
 
-            <p className={styles.description}>{film.description}</p>
-
-            <button
-              className={`${styles.favBtn} ${favori ? styles.favActive : ''}`}
-              onClick={() => toggleFavori(film)}
-            >
-              {favori ? '♥ Retirer des favoris' : '♡ Ajouter aux favoris'}
-            </button>
+            <div className={styles.actions}>
+              <button
+                className={`${styles.favBtn} ${favori ? styles.favActive : ''}`}
+                onClick={() => toggleFavori(film)}
+              >
+                {favori ? '♥ Retirer des favoris' : '♡ Ajouter aux favoris'}
+              </button>
+              <button
+                className={`${styles.watchBtn} ${watchlist ? styles.watchActive : ''}`}
+                onClick={() => toggleWatchlist(film)}
+              >
+                {watchlist ? '✓ Dans la watchlist' : '+ Watchlist'}
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Films similaires */}
         {similaires.length > 0 && (
           <section className={styles.similaires}>
             <h2 className={styles.similairesTitle}>Films similaires</h2>
             <div className={styles.similairesGrid}>
-              {similaires.map((s) => (
+              {similaires.map(s => (
                 <Link to={`/films/${s.id}`} key={s.id} className={styles.similaireCard}>
-                  <img src={s.image} alt={s.titre} />
-                  <p>{s.titre}</p>
-                  <span>⭐ {s.note}</span>
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${s.poster_path}`}
+                    alt={s.title}
+                  />
+                  <p>{s.title}</p>
+                  <span>⭐ {s.vote_average?.toFixed(1)}</span>
                 </Link>
               ))}
             </div>

@@ -1,52 +1,31 @@
-import { createContext, useState, useContext, useEffect } from "react"
+import { createContext, useState, useContext } from "react"
+import { api } from "../services/api.js"
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("currentUser")
-    return savedUser ? JSON.parse(savedUser) : null
+    const saved = localStorage.getItem("currentUser")
+    return saved ? JSON.parse(saved) : null
   })
 
-  function register(username, email, password) {
-    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]")
-
-    const alreadyExists = existingUsers.find(u => u.email === email)
-    if (alreadyExists) {
-      throw new Error("Cet email est déjà utilisé")
-    }
-
-    const newUser = {
-      id: crypto.randomUUID(),
-      username,
-      email,
-      password
-    }
-
-    localStorage.setItem("users", JSON.stringify([...existingUsers, newUser]))
-    
-    setUser(newUser)
-    localStorage.setItem("currentUser", JSON.stringify(newUser)) // ✅ AJOUT
+  async function register(username, email, password) {
+    const data = await api.register(username, email, password)
+    const userWithToken = { ...data.user, token: data.token }
+    setUser(userWithToken)
+    localStorage.setItem("currentUser", JSON.stringify(userWithToken))
   }
 
-  function login(email, password) {
-    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]")
-
-    const foundUser = existingUsers.find(
-      u => u.email === email && u.password === password
-    )
-
-    if (!foundUser) {
-      throw new Error("Email ou mot de passe incorrect")
-    }
-
-    setUser(foundUser)
-    localStorage.setItem("currentUser", JSON.stringify(foundUser)) // ✅ AJOUT
+  async function login(email, password) {
+    const data = await api.login(email, password)
+    const userWithToken = { ...data.user, token: data.token }
+    setUser(userWithToken)
+    localStorage.setItem("currentUser", JSON.stringify(userWithToken))
   }
 
   function logout() {
     setUser(null)
-    localStorage.removeItem("currentUser") // ✅ propre
+    localStorage.removeItem("currentUser")
   }
 
   return (

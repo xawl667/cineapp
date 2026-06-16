@@ -13,19 +13,23 @@ function Register() {
     password: ""
   })
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setError(null)
+    setLoading(true)
     try {
-      register(formData.username, formData.email, formData.password)
+      await register(formData.username, formData.email, formData.password)
       navigate("/")
     } catch (err) {
       setError(err.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -68,7 +72,9 @@ function Register() {
               onChange={handleChange}
             />
           </div>
-          <button className={styles.btn} type="submit">Créer mon compte</button>
+          <button className={styles.btn} type="submit" disabled={loading}>
+            {loading ? 'Création...' : 'Créer mon compte'}
+          </button>
         </form>
 
         <div className={styles.footer}>

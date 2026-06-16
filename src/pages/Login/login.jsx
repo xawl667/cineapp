@@ -9,19 +9,23 @@ function Login() {
 
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setError(null)
+    setLoading(true)
     try {
-      login(formData.email, formData.password)
+      await login(formData.email, formData.password)
       navigate("/")
     } catch (err) {
       setError(err.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -54,7 +58,9 @@ function Login() {
               onChange={handleChange}
             />
           </div>
-          <button className={styles.btn} type="submit">Se connecter</button>
+          <button className={styles.btn} type="submit" disabled={loading}>
+            {loading ? 'Connexion...' : 'Se connecter'}
+          </button>
         </form>
 
         <div className={styles.footer}>
