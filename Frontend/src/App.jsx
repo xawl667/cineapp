@@ -10,6 +10,9 @@ import Login from './pages/Login/Login'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import Profile from './pages/Profile/profile'
 import Watchlist from './pages/Watchlist/Watchlist'
+import Mood from './pages/Mood/Mood'
+import Feed from './pages/Feed/Feed'
+import UserProfile from './pages/UserProfile/UserProfile'
 import { useFavoris } from './hooks/useFavoris'
 import { useWatchlist } from './hooks/useWatchlist'
 
@@ -48,6 +51,21 @@ function App() {
             <Watchlist watchlist={watchlist} toggleWatchlist={toggleWatchlist} />
           </ProtectedRoute>
         } />
+        <Route path="/mood" element={
+          <ProtectedRoute>
+            <Mood
+              toggleFavori={toggleFavori}
+              isFavori={isFavori}
+              toggleWatchlist={toggleWatchlist}
+              isInWatchlist={isInWatchlist}
+            />
+          </ProtectedRoute>
+        } />
+        <Route path="/feed" element={
+          <ProtectedRoute>
+            <Feed />
+          </ProtectedRoute>
+        } />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={
@@ -55,6 +73,7 @@ function App() {
             <Profile />
           </ProtectedRoute>
         } />
+        <Route path="/users/:id" element={<UserProfile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

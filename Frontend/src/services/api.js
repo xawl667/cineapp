@@ -47,6 +47,7 @@ export const api = {
   getFilmById: (id) => apiFetch(`/films/${id}`),
   searchFilms: (q) => apiFetch(`/films/search?q=${encodeURIComponent(q)}`),
   getTrending: () => apiFetch('/films/trending'),
+  getSimilarFilms: (id) => apiFetch(`/films/${id}/similar`),
 
   // Favoris
   getFavoris: () => apiFetch('/favoris'),
@@ -77,4 +78,21 @@ export const api = {
     }),
   removeWatched: (film_id) =>
     apiFetch(`/watched/${film_id}`, { method: 'DELETE' }),
+
+  // Mood
+  getMoodRecommendations: (mood) => apiFetch(`/mood/${mood}`),
+
+  getSimilarFilms: (id) => apiFetch(`/films/${id}/similar`),
+
+
+  // Social
+followUser: (user_id) => apiFetch(`/social/${user_id}/follow`, { method: 'POST' }),
+unfollowUser: (user_id) => apiFetch(`/social/${user_id}/follow`, { method: 'DELETE' }),
+getFollowers: (user_id) => apiFetch(`/social/${user_id}/followers`),
+getFollowing: (user_id) => apiFetch(`/social/${user_id}/following`),
+getPublicProfile: (user_id) => apiFetch(`/social/${user_id}/profile`),
+getFeed: () => apiFetch('/social/feed'),
+searchUsers: (q) => apiFetch(`/social/search?q=${encodeURIComponent(q)}`),
+
+
 }

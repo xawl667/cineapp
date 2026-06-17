@@ -20,11 +20,32 @@ export async function addFavori(req, res) {
   const { film_id } = req.body
   try {
     await pool.query(
-      `INSERT INTO favoris (user_id, film_id)
-       VALUES ($1, $2)
-       ON CONFLICT DO NOTHING`,
+      `INSERT INTO favoris (user_id, film_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
       [req.user.id, film_id]
     )
+    await pool.query(
+      `INSERT INTO activities (user_id, type, film_id) VALUES ($1, 'favori', $2)`,
+      [req.user.id, film_id]
+    )
+
+    const followers = await pool.query(
+      `SELECT follower_id FROM follows WHERE following_id = $1`,
+      [req.user.id]
+    )
+    const io = req.app.get('io')
+    const userSockets = req.app.get('userSockets')
+
+    followers.rows.forEach(({ follower_id }) => {
+      const socketId = userSockets.get(follower_id)
+      if (socketId) {
+        io.to(socketId).emit('new_activity', {
+          type: 'favori',
+          username: req.user.username,
+          film_id
+        })
+      }
+    })
+
     res.status(201).json({ message: 'Ajouté aux favoris' })
   } catch (err) {
     console.error(err)

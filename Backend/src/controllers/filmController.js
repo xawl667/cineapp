@@ -91,3 +91,17 @@ export async function searchFilms(req, res) {
     res.status(500).json({ error: 'Erreur serveur' })
   }
 }
+
+export async function getSimilarFilms(req, res) {
+  const { id } = req.params
+  try {
+    const response = await tmdbFetch(
+      `${TMDB_BASE_URL}/movie/${id}/similar?language=fr-FR`
+    )
+    const data = await response.json()
+    res.json((data.results || []).slice(0, 6))
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Erreur serveur' })
+  }
+}

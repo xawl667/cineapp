@@ -22,12 +22,11 @@ function FilmDetail({ toggleFavori, isFavori, toggleWatchlist, isInWatchlist }) 
 
   // Films similaires via TMDB
   useEffect(() => {
-    if (!film) return
-    fetch(`https://api.themoviedb.org/3/movie/${film.tmdb_id}/similar?language=fr-FR&api_key=${import.meta.env.VITE_TMDB_API_KEY}`)
-      .then(r => r.json())
-      .then(data => setSimilaires(data.results?.slice(0, 3) || []))
-      .catch(err => console.error('Erreur similaires:', err))
-  }, [film])
+  if (!film) return
+  api.getSimilarFilms(film.tmdb_id)
+    .then(data => setSimilaires(data))
+    .catch(err => console.error('Erreur similaires:', err))
+}, [film])
 
   if (loading) return <div className="page-wrapper"><p>Chargement...</p></div>
   if (!film) return null
