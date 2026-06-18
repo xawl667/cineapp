@@ -1,0 +1,40 @@
+.main { opacity: 0; transform: translateY(16px); transition: opacity 0.5s, transform 0.5s; }
+.visible { opacity: 1; transform: translateY(0); }
+
+/* --- HERO --- */
+.hero { position: relative; padding: 5rem 1.5rem; min-height: 450px; display: flex; align-items: center; overflow: hidden; }
+.heroBackground { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+.heroBackground img { width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(0.4); }
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,10,15,0.9) 0%, rgba(10,10,15,0.3) 100%); }
+.heroContent { max-width: 1200px; margin: 0 auto; width: 100%; }
+
+.eyebrow { font-size: 0.85rem; color: var(--accent); font-weight: 600; text-transform: uppercase; margin-bottom: 0.75rem; }
+.heroTitle { font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1.1; margin-bottom: 1.5rem; }
+.heroTitle span { color: var(--accent); }
+.heroSub { max-width: 500px; margin-bottom: 2rem; color: var(--text-muted); }
+.heroActions { display: flex; gap: 1rem; }
+
+/* --- BOUTONS --- */
+.btnPrimary { background: var(--accent); color: #000; padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 700; text-decoration: none; }
+.btnSecondary { border: 1px solid var(--border); color: var(--text); padding: 0.8rem 1.5rem; border-radius: 50px; text-decoration: none; }
+
+/* --- ICONES ETOILES --- */
+.starIcon { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--accent); font-weight: 600; }
+.starIcon::before { content: "★"; font-size: 0.85em; }
+
+/* --- SECTIONS --- */
+.section { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; }
+.sectionTitle { font-size: 1.5rem; margin-bottom: 1.5rem; }
+
+/* --- GRID TOP 3 --- */
+.topGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+.topCard { display: flex; align-items: center; background: var(--bg2); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); text-decoration: none; color: var(--text); transition: 0.2s; }
+.topCard:hover { border-color: var(--accent); }
+.topImage { width: 60px; height: 85px; object-fit: cover; border-radius: 4px; margin-right: 1rem; }
+.topRank { font-weight: bold; color: var(--accent); margin-right: 1rem; font-size: 1.2rem; }
+
+/* --- GRID TENDANCES --- */
+.tendancesGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; }
+.tendanceCard { text-decoration: none; color: inherit; }
+.tendanceImage { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem; }
+.tendanceTitre { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }
