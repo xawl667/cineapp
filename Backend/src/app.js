@@ -41,7 +41,7 @@ app.set('userSockets', userSockets)
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://FRONTEND.vercel.app' // ON remplace avec la vraie Url 
+    'https://cineapp-34arg2v6o-xawl667s-projects.vercel.app/' // ON remplace avec la vraie Url 
   ],
   credentials: true
 }))
