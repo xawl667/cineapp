@@ -38,7 +38,14 @@ io.on('connection', (socket) => {
 app.set('io', io)
 app.set('userSockets', userSockets)
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'https://FRONTEND.vercel.app' // ON remplace avec la vraie Url 
+  ],
+  credentials: true
+}))
+
 app.use(express.json())
 
 app.use('/api/auth', authRoutes)
