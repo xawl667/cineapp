@@ -1,0 +1,19 @@
+.stars {
+  display: flex;
+  gap: 0.15rem;
+}
+
+.starBtn {
+  font-size: 1.2rem;
+  color: var(--accent);
+  transition: transform 0.15s;
+  line-height: 1;
+}
+
+.starBtn:hover:not(:disabled) {
+  transform: scale(1.15);
+}
+
+.starBtn:disabled {
+  cursor: default;
+}

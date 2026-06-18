@@ -1,0 +1,190 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 4rem; /* Ajout d'un peu d'air en bas */
+}
+
+.backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 70vh; /* Un peu plus grand pour plus d'immersion */
+  background-size: cover;
+  background-position: center top;
+  filter: blur(30px) brightness(0.3); /* Flou plus prononcé pour un effet premium */
+  transform: scale(1.1);
+  z-index: 0;
+  pointer-events: none; /* Empêche le backdrop de bloquer les clics */
+}
+
+.backdropOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 20%, var(--bg) 100%);
+}
+
+.content {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding-top: 2rem;
+}
+
+.poster {
+  width: 100%;
+  max-width: 300px; /* Plus grand sur desktop, flexible sur mobile */
+  border-radius: var(--radius);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Ombre plus moderne */
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.poster:hover {
+  transform: scale(1.02);
+}
+
+.titre {
+  font-family: var(--font-title);
+  font-size: clamp(2.5rem, 8vw, 4rem); /* Plus imposant */
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Amélioration des boutons pour les rendre "cliquables" */
+.actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 2rem 0;
+}
+
+.favBtn, .watchBtn, .watchedBtn {
+  cursor: pointer;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px; /* Plus moderne que 50px */
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.favBtn:active { transform: scale(0.95); }
+
+.favBtn:hover {
+  background: rgba(192, 57, 43, 0.2);
+  border-color: var(--accent2);
+}
+
+/* SIMILAIRES - Grille CSS moderne */
+.similairesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1.5rem;
+}
+
+.similaireCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.similaireCard img {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.similaireCard:hover img {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.3);
+}
+
+/* --- CASTING (Plus compact) --- */
+.castSection {
+  margin-top: 4rem;
+}
+
+.castTitle {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.castGrid {
+  display: grid;
+  /* On crée des cartes plus petites que les films (100px au lieu de 140px) */
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+}
+
+.castCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.castCard img, 
+.castPlaceholder {
+  width: 100px; /* Taille fixe pour garder l'harmonie */
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%; /* Effet portrait circulaire */
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.actorName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.characterName {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.genres {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+}
+
+.genreBadge {
+  padding: 0.4rem 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px; /* Un arrondi plus doux que 50px (plus moderne) */
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+/* Effet au survol pour donner un côté interactif */
+.genreBadge:hover {
+  background: rgba(var(--accent-rgb), 0.15); /* Suppose que tu as une variable RGB pour ton accent */
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
