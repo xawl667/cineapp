@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import FilmCard from '../../components/FilmCard/FilmCard'
-import styles from './Watchlist.module.css'
+import styles from './watchlist.module.css'
 
 function Watchlist({ watchlist, toggleWatchlist, isInWatchlist }) {
   return (

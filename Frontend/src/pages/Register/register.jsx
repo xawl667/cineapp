@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useAuth } from "../../context/AuthContext"
 import { useNavigate, Link } from "react-router-dom"
-import styles from "./Register.module.css"
+import styles from "./register.module.css"
 
 function Register() {
   const { register } = useAuth()
