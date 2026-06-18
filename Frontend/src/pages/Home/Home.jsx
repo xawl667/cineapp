@@ -34,7 +34,6 @@ function Home() {
 
   return (
     <main className={`${styles.main} ${visible ? styles.visible : ''}`}>
-
       {/* HERO */}
       <section className={styles.hero}>
         {topFilms[0] && (
@@ -55,32 +54,12 @@ function Home() {
             gérez votre watchlist et découvrez vos prochains coups de cœur.
           </p>
           <div className={styles.heroActions}>
-            <Link to="/films" className={styles.btnPrimary}>
-              Voir tous les films →
-            </Link>
+            <Link to="/films" className={styles.btnPrimary}>Voir tous les films →</Link>
             {user ? (
-              <Link to="/watchlist" className={styles.btnSecondary}>
-                Ma Watchlist
-              </Link>
+              <Link to="/watchlist" className={styles.btnSecondary}>Ma Watchlist</Link>
             ) : (
-              <Link to="/register" className={styles.btnSecondary}>
-                Créer un compte
-              </Link>
+              <Link to="/register" className={styles.btnSecondary}>Créer un compte</Link>
             )}
-          </div>
-          <div className={styles.heroStats}>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>500K+</span>
-              <span className={styles.statLabel}>Films</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>4K</span>
-              <span className={styles.statLabel}>En HD</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>20+</span>
-              <span className={styles.statLabel}>Genres</span>
-            </div>
           </div>
         </div>
       </section>
@@ -97,7 +76,7 @@ function Home() {
                 <div className={styles.topInfo}>
                   <h3>{film.titre}</h3>
                   <p>{film.annee} · {film.genres?.[0]}</p>
-                  <p className={styles.topNote}>⭐ {parseFloat(film.note).toFixed(1)}</p>
+                  <p className={styles.starIcon}>{parseFloat(film.note).toFixed(1)}</p>
                 </div>
               </Link>
             ))}
@@ -111,47 +90,17 @@ function Home() {
           <h2 className={styles.sectionTitle}>🔥 Tendances cette semaine</h2>
           <div className={styles.tendancesGrid}>
             {tendances.map(film => (
-              <Link
-                to={`/films/${film.id}`}
-                key={film.id}
-                className={styles.tendanceCard}
-              >
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${film.poster_path}`}
-                  alt={film.title}
-                  className={styles.tendanceImage}
-                />
+              <Link to={`/films/${film.id}`} key={film.id} className={styles.tendanceCard}>
+                <img src={`https://image.tmdb.org/t/p/w500${film.poster_path}`} alt={film.title} className={styles.tendanceImage} />
                 <div className={styles.tendanceInfo}>
                   <p className={styles.tendanceTitre}>{film.title}</p>
-                  <span>⭐ {film.vote_average?.toFixed(1)}</span>
+                  <span className={styles.starIcon}>{film.vote_average?.toFixed(1)}</span>
                 </div>
               </Link>
             ))}
           </div>
         </section>
       )}
-
-      {/* CTA */}
-      <section className={styles.cta}>
-        {user ? (
-          <>
-            <h2>Continuez votre exploration</h2>
-            <p>Des milliers de films vous attendent.</p>
-            <Link to="/films" className={styles.btnPrimary}>
-              Parcourir le catalogue
-            </Link>
-          </>
-        ) : (
-          <>
-            <h2>Rejoignez CinéApp</h2>
-            <p>Créez un compte pour sauvegarder vos favoris et gérer votre watchlist.</p>
-            <Link to="/register" className={styles.btnPrimary}>
-              Créer un compte gratuit
-            </Link>
-          </>
-        )}
-      </section>
-
     </main>
   )
 }

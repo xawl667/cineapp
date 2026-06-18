@@ -1,16 +1,18 @@
 import { useState } from "react"
 import { useAuth } from "../../context/AuthContext"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import styles from "./Profile.module.css"
 import { useFavoris } from "../../hooks/useFavoris"
 import { useWatchlist } from "../../hooks/useWatchlist"
+import { useWatched } from "../../hooks/useWatched"
 import { api } from "../../services/api"
 
 function Profile() {
-  const { user, logout, updateUser } = useAuth() 
+  const { user, logout, updateUser } = useAuth()
   const navigate = useNavigate()
   const { favoris } = useFavoris()
   const { watchlist } = useWatchlist()
+  const { watched } = useWatched()
 
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
@@ -39,14 +41,14 @@ function Profile() {
 
     try {
       await api.updateProfile(formData.bio, formData.avatar)
-      
+
       if (updateUser) {
         updateUser({ ...user, ...formData })
       } else {
         const updatedUser = { ...user, ...formData }
         localStorage.setItem("currentUser", JSON.stringify(updatedUser))
       }
-      
+
       setIsEditing(false)
     } catch (err) {
       console.error('Erreur update profil:', err)
@@ -60,7 +62,7 @@ function Profile() {
 
   return (
     <div className={styles.profileContainer}>
-      
+
       {/* --- EN-TÊTE DU PROFIL --- */}
       <section className={styles.profileHeader}>
         <div className={styles.avatarWrapper}>
@@ -73,17 +75,20 @@ function Profile() {
 
         <div className={styles.userInfo}>
           <h1 className={styles.username}>{user.username}</h1>
-         
+
           {user.bio && !isEditing && <p className={styles.bio}>"{user.bio}"</p>}
-          
+
           {!isEditing && (
-            <button className={styles.editBtn} onClick={() => setIsEditing(true)}>
-              Modifier le profil
-            </button>
+            <div className={styles.headerActions}>
+              <button className={styles.editBtn} onClick={() => setIsEditing(true)}>
+                Modifier le profil
+              </button>
+              <button className={styles.logoutBtn} onClick={handleLogout}>
+                Se déconnecter
+              </button>
+            </div>
           )}
         </div>
-
-        
       </section>
 
       {/* --- FORMULAIRE D'ÉDITION --- */}
@@ -141,13 +146,13 @@ function Profile() {
           <span className={styles.statNumber}>{watchlist.length}</span>
           <span className={styles.statLabel}>Watchlist</span>
         </div>
-        <div className={styles.statCard}>
-          <span className={styles.statNumber}>0</span>
+        <Link to="/watched" className={styles.statCard}>
+          <span className={styles.statNumber}>{watched.length}</span>
           <span className={styles.statLabel}>Films vus</span>
-        </div>
+        </Link>
       </section>
 
-      {/* --- CONTENU (FAVORIS & WATCHLIST) --- */}
+      {/* --- CONTENU (FAVORIS, WATCHLIST, WATCHED) --- */}
       <section className={styles.listsContainer}>
         <div className={styles.listSection}>
           <h2>Mes Favoris ({favoris.length})</h2>
@@ -156,7 +161,6 @@ function Profile() {
           ) : (
             <div className={styles.movieGrid}>
               {favoris.map(movie => {
-                // Reconstruction de l'URL TMDB pour les favoris ou image de secours
                 const posterUrl = movie.affiche || "https://placehold.co/300x450/1a1a2e/ffffff?text=Image+Indisponible"
                 return (
                   <div key={movie.id} className={styles.movieCard}>
@@ -176,13 +180,31 @@ function Profile() {
           ) : (
             <div className={styles.movieGrid}>
               {watchlist.map(movie => {
-                // Reconstruction de l'URL TMDB pour la watchlist ou image de secours
                 const posterUrl = movie.affiche || "https://placehold.co/300x450/1a1a2e/ffffff?text=Image+Indisponible"
-
                 return (
                   <div key={movie.id} className={styles.movieCard}>
                     <img src={posterUrl} alt={movie.titre} />
                     <h4>{movie.titre}</h4>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className={styles.listSection}>
+          <h2>Films vus ({watched.length})</h2>
+          {watched.length === 0 ? (
+            <p className={styles.emptyMessage}>Aucun film marqué comme vu.</p>
+          ) : (
+            <div className={styles.movieGrid}>
+              {watched.map(movie => {
+                const posterUrl = movie.affiche || "https://placehold.co/300x450/1a1a2e/ffffff?text=Image+Indisponible"
+                return (
+                  <div key={movie.id} className={styles.movieCard}>
+                    <img src={posterUrl} alt={movie.titre} />
+                    <h4>{movie.titre}</h4>
+                    {movie.rating && <span className={styles.miniRating}>⭐ {movie.rating}/5</span>}
                   </div>
                 )
               })}

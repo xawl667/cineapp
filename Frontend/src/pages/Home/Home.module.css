@@ -1,213 +1,40 @@
-.main {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.5s, transform 0.5s;
-}
+.main { opacity: 0; transform: translateY(16px); transition: opacity 0.5s, transform 0.5s; }
+.visible { opacity: 1; transform: translateY(0); }
 
-.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* --- HERO --- */
+.hero { position: relative; padding: 5rem 1.5rem; min-height: 450px; display: flex; align-items: center; overflow: hidden; }
+.heroBackground { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+.heroBackground img { width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(0.4); }
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,10,15,0.9) 0%, rgba(10,10,15,0.3) 100%); }
+.heroContent { max-width: 1200px; margin: 0 auto; width: 100%; }
 
-/* HERO */
-.hero {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 5rem 1.5rem 4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
+.eyebrow { font-size: 0.85rem; color: var(--accent); font-weight: 600; text-transform: uppercase; margin-bottom: 0.75rem; }
+.heroTitle { font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1.1; margin-bottom: 1.5rem; }
+.heroTitle span { color: var(--accent); }
+.heroSub { max-width: 500px; margin-bottom: 2rem; color: var(--text-muted); }
+.heroActions { display: flex; gap: 1rem; }
 
-.eyebrow {
-  font-size: 0.85rem;
-  color: var(--accent);
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
-}
+/* --- BOUTONS --- */
+.btnPrimary { background: var(--accent); color: #000; padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 700; text-decoration: none; }
+.btnSecondary { border: 1px solid var(--border); color: var(--text); padding: 0.8rem 1.5rem; border-radius: 50px; text-decoration: none; }
 
-.heroTitle {
-  font-family: var(--font-title);
-  font-size: clamp(3rem, 8vw, 6rem);
-  line-height: 1;
-  letter-spacing: 2px;
-  color: var(--text);
-}
+/* --- ICONES ETOILES --- */
+.starIcon { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--accent); font-weight: 600; }
+.starIcon::before { content: "★"; font-size: 0.85em; }
 
-.heroTitle span {
-  color: var(--accent);
-}
+/* --- SECTIONS --- */
+.section { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; }
+.sectionTitle { font-size: 1.5rem; margin-bottom: 1.5rem; }
 
-.heroSub {
-  max-width: 520px;
-  color: var(--text-muted);
-  font-size: 1.05rem;
-  line-height: 1.7;
-  margin-top: 1.2rem;
-}
+/* --- GRID TOP 3 --- */
+.topGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+.topCard { display: flex; align-items: center; background: var(--bg2); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); text-decoration: none; color: var(--text); transition: 0.2s; }
+.topCard:hover { border-color: var(--accent); }
+.topImage { width: 60px; height: 85px; object-fit: cover; border-radius: 4px; margin-right: 1rem; }
+.topRank { font-weight: bold; color: var(--accent); margin-right: 1rem; font-size: 1.2rem; }
 
-.heroActions {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-top: 1.5rem;
-}
-
-.btnPrimary {
-  display: inline-block;
-  background: var(--accent);
-  color: #0a0a0f;
-  font-weight: 700;
-  font-size: 0.95rem;
-  padding: 0.8rem 1.8rem;
-  border-radius: 50px;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.btnPrimary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(232, 184, 75, 0.3);
-}
-
-.btnSecondary {
-  display: inline-block;
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-weight: 500;
-  font-size: 0.95rem;
-  padding: 0.8rem 1.8rem;
-  border-radius: 50px;
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.btnSecondary:hover {
-  border-color: var(--accent);
-  background: rgba(232,184,75,0.05);
-}
-
-.heroStats {
-  display: flex;
-  gap: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.statNumber {
-  font-family: var(--font-title);
-  font-size: 2.2rem;
-  color: var(--accent);
-  line-height: 1;
-}
-
-.statLabel {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* SECTION */
-.section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem 4rem;
-}
-
-.sectionTitle {
-  font-family: var(--font-title);
-  font-size: 1.8rem;
-  letter-spacing: 1px;
-  margin-bottom: 1.5rem;
-  color: var(--text);
-}
-
-/* TOP GRID */
-.topGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.25rem;
-}
-
-.topCard {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
-  color: var(--text);
-  transition: border-color 0.2s, transform 0.2s;
-  position: relative;
-}
-
-.topCard:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-
-.topRank {
-  position: absolute;
-  top: 0.6rem;
-  left: 0.6rem;
-  font-family: var(--font-title);
-  font-size: 1.2rem;
-  color: var(--accent);
-}
-
-.topImage {
-  width: 60px;
-  height: 90px;
-  object-fit: cover;
-  border-radius: 6px;
-  flex-shrink: 0;
-  margin-left: 1.5rem;
-}
-
-.topInfo h3 {
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin-bottom: 0.3rem;
-}
-
-.topInfo p {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-.topNote {
-  margin-top: 0.3rem;
-  color: var(--accent) !important;
-  font-weight: 600 !important;
-}
-
-/* CTA */
-.cta {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem 5rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.cta h2 {
-  font-family: var(--font-title);
-  font-size: 2.5rem;
-  letter-spacing: 1px;
-}
-
-.cta p {
-  color: var(--text-muted);
-  font-size: 1rem;
-}
+/* --- GRID TENDANCES --- */
+.tendancesGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; }
+.tendanceCard { text-decoration: none; color: inherit; }
+.tendanceImage { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem; }
+.tendanceTitre { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }

@@ -131,3 +131,16 @@ export async function getFilmDetails(req, res) {
     res.status(500).json({ error: 'Erreur serveur' })
   }
 }
+
+export async function getTrending(req, res) {
+  try {
+    const response = await tmdbFetch(
+      `${TMDB_BASE_URL}/trending/movie/week?language=fr-FR`
+    )
+    const data = await response.json()
+    res.json(data.results || [])
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Erreur serveur' })
+  }
+}
