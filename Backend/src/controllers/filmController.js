@@ -105,3 +105,29 @@ export async function getSimilarFilms(req, res) {
     res.status(500).json({ error: 'Erreur serveur' })
   }
 }
+
+export async function getFilmDetails(req, res) {
+  const { id } = req.params
+  try {
+    const response = await tmdbFetch(
+      `${TMDB_BASE_URL}/movie/${id}?language=fr-FR&append_to_response=credits,videos`
+    )
+    const film = await response.json()
+
+    const realisateur = film.credits?.crew?.find(c => c.job === 'Director')
+    const cast = film.credits?.cast?.slice(0, 6) || []
+    const trailer = film.videos?.results?.find(v => v.type === 'Trailer' && v.site === 'YouTube')
+
+    const saved = await upsertFilm(film)
+
+    res.json({
+      ...saved,
+      realisateur: realisateur?.name || null,
+      cast: cast.map(c => ({ name: c.name, character: c.character, photo: c.profile_path ? `${TMDB_IMG_URL}${c.profile_path}` : null })),
+      trailerKey: trailer?.key || null
+    })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Erreur serveur' })
+  }
+}

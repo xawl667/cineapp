@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../../services/api'
+import { socket } from '../../services/socket'
+import { useAuth } from '../../context/AuthContext'
 import styles from './Feed.module.css'
 
 function Feed() {
+  const { user } = useAuth()
   const [activities, setActivities] = useState([])
   const [users, setUsers] = useState([])
   const [search, setSearch] = useState('')
@@ -15,6 +18,18 @@ function Feed() {
       .catch(err => console.error('Erreur feed:', err))
       .finally(() => setLoading(false))
   }, [])
+
+  // Temps réel via Socket.io
+  useEffect(() => {
+    if (!user) return
+    socket.emit('register', user.id)
+
+    socket.on('new_activity', () => {
+      api.getFeed().then(data => setActivities(data))
+    })
+
+    return () => socket.off('new_activity')
+  }, [user])
 
   useEffect(() => {
     if (search.trim() === '') {

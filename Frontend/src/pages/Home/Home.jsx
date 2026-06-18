@@ -37,6 +37,12 @@ function Home() {
 
       {/* HERO */}
       <section className={styles.hero}>
+        {topFilms[0] && (
+          <div className={styles.heroBackground}>
+            <img src={topFilms[0].affiche} alt="" />
+            <div className={styles.heroOverlay}></div>
+          </div>
+        )}
         <div className={styles.heroContent}>
           <p className={styles.eyebrow}>🎬 Votre catalogue de films</p>
           <h1 className={styles.heroTitle}>
@@ -62,19 +68,19 @@ function Home() {
               </Link>
             )}
           </div>
-        </div>
-        <div className={styles.heroStats}>
-          <div className={styles.stat}>
-            <span className={styles.statNumber}>500K+</span>
-            <span className={styles.statLabel}>Films</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statNumber}>4K</span>
-            <span className={styles.statLabel}>En HD</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statNumber}>20+</span>
-            <span className={styles.statLabel}>Genres</span>
+          <div className={styles.heroStats}>
+            <div className={styles.stat}>
+              <span className={styles.statNumber}>500K+</span>
+              <span className={styles.statLabel}>Films</span>
+            </div>
+            <div className={styles.stat}>
+              <span className={styles.statNumber}>4K</span>
+              <span className={styles.statLabel}>En HD</span>
+            </div>
+            <div className={styles.stat}>
+              <span className={styles.statNumber}>20+</span>
+              <span className={styles.statLabel}>Genres</span>
+            </div>
           </div>
         </div>
       </section>

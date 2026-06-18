@@ -78,7 +78,7 @@ export const api = {
     }),
   removeWatched: (film_id) =>
     apiFetch(`/watched/${film_id}`, { method: 'DELETE' }),
-
+  
   // Mood
   getMoodRecommendations: (mood) => apiFetch(`/mood/${mood}`),
 
@@ -94,5 +94,18 @@ getPublicProfile: (user_id) => apiFetch(`/social/${user_id}/profile`),
 getFeed: () => apiFetch('/social/feed'),
 searchUsers: (q) => apiFetch(`/social/search?q=${encodeURIComponent(q)}`),
 
+updateProfile: (bio, avatar) => apiFetch('/social/profile', {
+  method: 'PUT',
+  body: JSON.stringify({ bio, avatar })
+}),
+
+
+getFilmDetails: (id) => apiFetch(`/films/${id}/details`),
+getWatched: () => apiFetch('/watched'),
+addWatched: (film_id, rating, review) => apiFetch('/watched', {
+  method: 'POST',
+  body: JSON.stringify({ film_id, rating, review })
+}),
+removeWatched: (film_id) => apiFetch(`/watched/${film_id}`, { method: 'DELETE' }),
 
 }

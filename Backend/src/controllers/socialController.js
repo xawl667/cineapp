@@ -73,7 +73,7 @@ export async function getPublicProfile(req, res) {
   const { user_id } = req.params
   try {
     const user = await pool.query(
-      `SELECT id, username, avatar, created_at FROM users WHERE id = $1`,
+      `SELECT id, username, avatar, bio, created_at FROM users WHERE id = $1`,
       [user_id]
     )
     if (user.rows.length === 0) {
@@ -85,6 +85,32 @@ export async function getPublicProfile(req, res) {
        INNER JOIN favoris fav ON fav.film_id = f.id
        WHERE fav.user_id = $1
        ORDER BY fav.created_at DESC LIMIT 12`,
+      [user_id]
+    )
+
+    const watchlistCount = await pool.query(
+      `SELECT COUNT(*) FROM watchlist WHERE user_id = $1`,
+      [user_id]
+    )
+
+    const watchedCount = await pool.query(
+      `SELECT COUNT(*) FROM watched WHERE user_id = $1`,
+      [user_id]
+    )
+
+    const favorisCount = await pool.query(
+      `SELECT COUNT(*) FROM favoris WHERE user_id = $1`,
+      [user_id]
+    )
+
+    const genresPreferes = await pool.query(
+      `SELECT unnest(f.genres) AS genre, COUNT(*) as count
+       FROM films f
+       INNER JOIN favoris fav ON fav.film_id = f.id
+       WHERE fav.user_id = $1
+       GROUP BY genre
+       ORDER BY count DESC
+       LIMIT 5`,
       [user_id]
     )
 
@@ -101,6 +127,12 @@ export async function getPublicProfile(req, res) {
     res.json({
       user: user.rows[0],
       favoris: favoris.rows,
+      stats: {
+        favoris: parseInt(favorisCount.rows[0].count),
+        watchlist: parseInt(watchlistCount.rows[0].count),
+        watched: parseInt(watchedCount.rows[0].count),
+        genresPreferes: genresPreferes.rows
+      },
       followersCount: parseInt(followersCount.rows[0].count),
       followingCount: parseInt(followingCount.rows[0].count)
     })
@@ -143,6 +175,21 @@ export async function searchUsers(req, res) {
       [`%${q}%`, req.user.id]
     )
     res.json(result.rows)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Erreur serveur' })
+  }
+}
+
+export async function updateProfile(req, res) {
+  const { bio, avatar } = req.body
+  try {
+    const result = await pool.query(
+      `UPDATE users SET bio = $1, avatar = $2 WHERE id = $3
+       RETURNING id, username, email, avatar, bio, created_at`,
+      [bio, avatar, req.user.id]
+    )
+    res.json(result.rows[0])
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Erreur serveur' })

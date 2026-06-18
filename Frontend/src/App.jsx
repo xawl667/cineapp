@@ -13,6 +13,7 @@ import Watchlist from './pages/Watchlist/Watchlist'
 import Mood from './pages/Mood/Mood'
 import Feed from './pages/Feed/Feed'
 import UserProfile from './pages/UserProfile/UserProfile'
+import Watched from './pages/Watched/Watched'
 import { useFavoris } from './hooks/useFavoris'
 import { useWatchlist } from './hooks/useWatchlist'
 
@@ -75,6 +76,11 @@ function App() {
         } />
         <Route path="/users/:id" element={<UserProfile />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/watched" element={
+          <ProtectedRoute>
+            <Watched />
+          </ProtectedRoute>
+        } />
       </Routes>
     </>
   )
