@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useAuth } from "../../context/AuthContext"
 import { useNavigate, Link } from "react-router-dom"
-import styles from "./Profile.module.css"
+import styles from "./profile.module.css"
 import { useFavoris } from "../../hooks/useFavoris"
 import { useWatchlist } from "../../hooks/useWatchlist"
 import { useWatched } from "../../hooks/useWatched"
