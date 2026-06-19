@@ -17,6 +17,7 @@ dotenv.config()
 
 const app = express()
 const httpServer = createServer(app)
+const FRONTEND_URL = (process.env.FRONTEND_URL || '').replace(/\/$/, '').split(',')
 
 const io = new Server(httpServer, {
   cors: { origin: process.env.FRONTEND_URL, 
