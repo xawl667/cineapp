@@ -1,4 +1,4 @@
-const BASE_URL = 'https://cineapp-production-fa9c.up.railway.app/api'
+const BASE_URL = 'https://cineapp-backend.up.railway.app/api'
 
 function getToken() {
   const user = localStorage.getItem('currentUser')
