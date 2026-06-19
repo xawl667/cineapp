@@ -1,3 +1,3 @@
 import { io } from 'socket.io-client'
 
-export const socket = io('https://cineapp-production-fa9c.up.railway.app')
+export const socket = io('https://cineapp-backend.up.railway.app')
