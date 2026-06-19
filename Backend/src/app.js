@@ -18,7 +18,9 @@ const app = express()
 const httpServer = createServer(app)
 
 const io = new Server(httpServer, {
-  cors: { origin: 'http://localhost:5173', credentials: true }
+  cors: { origin: process.env.FRONTEND_URL, 
+    credentials: true 
+  }
 })
 
 const userSockets = new Map()
@@ -39,10 +41,7 @@ app.set('io', io)
 app.set('userSockets', userSockets)
 
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://cineapp-pgz3wk80b-xawl667s-projects.vercel.app/' // ON remplace avec la vraie Url 
-  ],
+  origin: process.env.FRONTEND_URL,
   credentials: true
 }))
 
