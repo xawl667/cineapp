@@ -3,7 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
-import { initDb } from './initDb.js'
+
 
 import authRoutes from './routes/auth.js'
 import filmRoutes from './routes/films.js'
@@ -60,7 +60,6 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok' }))
 
 const PORT = process.env.PORT || 3000
 
-await initDb()
 
 httpServer.listen(PORT, () => {
   console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`)
